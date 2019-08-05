@@ -83,6 +83,7 @@ std::shared_ptr<okvis::MultiFrame> FrameSynchronizer::addNewFrame(std::shared_pt
   okvis::Time frame_stamp = frame->timeStamp;
   std::shared_ptr<okvis::MultiFrame> multiFrame;
   int position;
+  //std::cout << "addNewFrame: " << position << " " << frame_stamp << std::endl; 
   if(findFrameByTime(frame_stamp,position)) {
     multiFrame = frameBuffer_[position].first;
     OKVIS_ASSERT_TRUE_DBG(Exception,multiFrame->image(frame->sensorId).empty(),
@@ -98,9 +99,11 @@ std::shared_ptr<okvis::MultiFrame> FrameSynchronizer::addNewFrame(std::shared_pt
     multiFrame = std::shared_ptr<okvis::MultiFrame>(new okvis::MultiFrame(parameters_.nCameraSystem,frame_stamp,
                                                                           okvis::IdProvider::instance().newId()));
     multiFrame->setImage(frame->sensorId,frame->measurement.image);
+    //std::cout << "buffer position: " << bufferPosition_ << " " << max_frame_sync_buffer_size << std::endl;
     bufferPosition_ = (bufferPosition_+1) % max_frame_sync_buffer_size;
     if(frameBuffer_[bufferPosition_].first != nullptr
        && frameBuffer_[bufferPosition_].second != numCameras_) {
+      std::cout << frameBuffer_[bufferPosition_].first << " " << frameBuffer_[bufferPosition_].second << " " << numCameras_ << std::endl;
      LOG(ERROR) << "Dropping frame with id " << frameBuffer_[bufferPosition_].first->id();
     }
     frameBuffer_[bufferPosition_].first = multiFrame;

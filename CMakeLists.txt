@@ -85,9 +85,12 @@ link_directories(${CMAKE_BINARY_DIR}/lib)
 
 # require Eigen
 find_package( Eigen REQUIRED )
-include_directories($ENV{EIGEN_INCLUDE_DIR}) 
-SET( EIGEN_INCLUDE_DIRS "$ENV{EIGEN_INCLUDE_DIR}" )
-SET( EIGEN_INCLUDE_DIR "$ENV{EIGEN_INCLUDE_DIR}" )
+include_directories(${EIGEN_INCLUDE_DIR}) 
+message(STATUS "Eigen found: ${EIGEN_INCLUDE_DIR}")
+#SET( EIGEN_INCLUDE_DIRS "$ENV{EIGEN_INCLUDE_DIR}" )
+#SET( EIGEN_INCLUDE_DIR "$ENV{EIGEN_INCLUDE_DIR}" )
+add_definitions(-DEIGEN_DONT_ALIGN_STATICALLY)
+add_definitions(-DEIGEN_DONT_VECTORIZE)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -161,7 +164,7 @@ find_package(SuiteSparse REQUIRED QUIET) #will be needed in any case...
 find_package(CXSparse QUIET) #optional
 if(${USE_SYSTEM_CERES})
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-  find_package( Ceres 1.9 REQUIRED )
+  find_package( Ceres REQUIRED )
   include_directories(BEFORE ${CERES_INCLUDE_DIRS})
   message(STATUS "Using system Ceres.")
 else()

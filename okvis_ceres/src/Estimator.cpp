@@ -239,9 +239,11 @@ bool Estimator::addStates(
     // let's add a prior
     Eigen::Matrix<double,6,6> information = Eigen::Matrix<double,6,6>::Zero();
     information(5,5) = 1.0e8; information(0,0) = 1.0e8; information(1,1) = 1.0e8; information(2,2) = 1.0e8;
+    std::cout << information << std::endl;
     std::shared_ptr<ceres::PoseError > poseError(new ceres::PoseError(T_WS, information));
     /*auto id2= */ mapPtr_->addResidualBlock(poseError,NULL,poseParameterBlock);
     //mapPtr_->isJacobianCorrect(id2,1.0e-6);
+    std::cout << "Pose ERROR Created\n" << std::endl;
 
     // sensor states
     for (size_t i = 0; i < extrinsicsEstimationParametersVec_.size(); ++i) {

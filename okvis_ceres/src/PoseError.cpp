@@ -71,8 +71,8 @@ void PoseError::setInformation(const information_t & information) {
   information_ = information;
   covariance_ = information.inverse();
   // perform the Cholesky decomposition on order to obtain the correct error weighting
-  Eigen::LLT<information_t> lltOfInformation(information_);
-  squareRootInformation_ = lltOfInformation.matrixL().transpose();
+  //Eigen::LLT<information_t> lltOfInformation(information_);
+  squareRootInformation_ = information_.llt().matrixL().transpose();
 }
 
 // This evaluates the error term and additionally computes the Jacobians.
